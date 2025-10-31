@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=67", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "beeflow-ai-toolkit"
+version = "0.1.0"
+description = "Beeflow AI Toolkit: prompt builders, OpenAI chat client, JSON schema validation, and content generators."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+  { name = "Beeflow Ltd" },
+  { name = "Rafał Przetakowski", email = "rafal.p@beeflow.co.uk" }
+]
+keywords = ["beeflow", "llm", "prompt", "jsonschema", "content-generator", "openai"]
+dependencies = [
+  "openai>=1.40.0",
+  "jsonschema>=4.21.0"
+]
+
+[project.urls]
+Homepage = "https://whathappensnext.app/"
+Repository = "https://github.com/beeflow/whathappensnext"
+
+[tool.setuptools]
+packages = [
+  "beeflow_ai",
+  "beeflow_ai.generator",
+  "beeflow_ai.prompt_builder",
+]
+
+[tool.setuptools.package-dir]
+beeflow_ai = "."
+
+
+[tool.black]
+line-length = 120
+include = '\.pyi?$'
+
+force-exclude = '''
+(
+  ^scripts/mincss\.py$
+| ^scripts/minjs\.py$
+)
+'''
+
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.idea
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | webtemplate
+    | fileTemplates/*
+  )/
+  | foo.py
+)
+'''

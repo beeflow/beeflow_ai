@@ -17,7 +17,9 @@ authors = [
 keywords = ["beeflow", "llm", "prompt", "jsonschema", "content-generator", "openai"]
 dependencies = [
   "openai>=1.40.0",
-  "jsonschema>=4.21.0"
+  "jsonschema>=4.21.0",
+  "pytest>=8.4.2",
+  "pre-commit>=4.3.0",
 ]
 
 [project.urls]

@@ -13,14 +13,28 @@ Distributed under the MIT licence. Suitable for use in any project.
 Option A: install directly from the source directory (recommended for local development)
 
 ```bash
-python -m pip install .
+# Optional: create and activate a virtual environment
+uv venv .venv && source .venv/bin/activate
+
+# Install the package
+uv sync
 ```
 
 Option B: build and install from a wheel package
 
 ```bash
-python -m pip install -U build && python -m build
-python -m pip install dist/beeflow_ai_toolkit-*.whl
+# Build the artefacts
+uv run --with build python -m build
+
+# Install the wheel (optional)
+# Prefer using `uv sync` for local development; wheel install is usually
+# needed only for consumers. If you still want to validate the wheel,
+# create a temporary project and add it as a dependency, then sync.
+# Example:
+#   mkdir /tmp/wheel-check && cd /tmp/wheel-check
+#   uv init
+#   uv add ../path/to/dist/beeflow_ai_toolkit-*.whl
+#   uv sync
 ```
 
 Requirements: Python 3.11+, `openai>=1.40.0`, `jsonschema>=4.21.0` (installed automatically).
@@ -33,19 +47,19 @@ You can build both source distribution (sdist) and wheel using the standard Pyth
 # Optional: clean previous build artefacts
 rm -rf dist/
 
-# Install the build backend
-python -m pip install -U build
-
 # Build sdist and wheel according to pyproject.toml
-python -m build
+uv run --with build python -m build
 
 # The artefacts will be placed in ./dist/
 ls dist/
 # beeflow_ai_toolkit-<version>.tar.gz (sdist)
 # beeflow_ai_toolkit-<version>-py3-none-any.whl (wheel)
 
-# Optionally, verify the wheel installs correctly
-python -m pip install dist/beeflow_ai_toolkit-*.whl
+# Optionally, validate the wheel in a throwaway project:
+#   mkdir /tmp/wheel-check && cd /tmp/wheel-check
+#   uv init
+#   uv add ../path/to/dist/beeflow_ai_toolkit-*.whl
+#   uv sync
 ```
 
 The project is configured via `pyproject.toml` and uses `setuptools` as the build backend.
@@ -57,21 +71,19 @@ Before publishing, ensure `pyproject.toml` contains correct metadata (`name`, `v
 1) Build the artefacts (sdist + wheel):
 
 ```bash
-python -m pip install -U build
-python -m build
+uv run --with build python -m build
 ```
 
 2) Install Twine and check the distributions:
 
 ```bash
-python -m pip install -U twine
-python -m twine check dist/*
+uv run --with twine twine check dist/*
 ```
 
 3) Upload to TestPyPI first (recommended):
 
 ```bash
-python -m twine upload --repository testpypi dist/*
+uv run --with twine twine upload --repository testpypi dist/*
 # Username: __token__
 # Password: <your TestPyPI token>
 ```
@@ -79,18 +91,17 @@ python -m twine upload --repository testpypi dist/*
 Verify installation from TestPyPI in a clean environment:
 
 ```bash
-python -m venv .venv-test
-./.venv-test/bin/python -m pip install -U pip
-./.venv-test/bin/python -m pip install \
-  --index-url https://test.pypi.org/simple \
+uv venv .venv-test && source .venv-test/bin/activate
+uv add --index-url https://test.pypi.org/simple \
   --extra-index-url https://pypi.org/simple \
   beeflow-ai-toolkit
+uv sync
 ```
 
 4) Upload to PyPI (production):
 
 ```bash
-python -m twine upload dist/*
+uv run --with twine twine upload dist/*
 # Username: __token__
 # Password: <your PyPI token>
 ```
@@ -100,7 +111,7 @@ You can also set environment variables to avoid interactive prompts:
 ```bash
 export TWINE_USERNAME=__token__
 export TWINE_PASSWORD=<your-token>
-python -m twine upload dist/*
+uv run --with twine twine upload dist/*
 ```
 
 Optional: add `classifiers` and `project.urls` to `pyproject.toml` to improve your package’s visibility on PyPI.

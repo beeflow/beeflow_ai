@@ -14,11 +14,7 @@ from typing import Callable, Optional
 
 from openai.types.chat import ChatCompletionMessageParam
 
-from ..openai_chat_completition_client import (
-    BaseContentGenerator,
-    ChatCompletionClient,
-    PromptBuilder,
-)
+from ..openai_chat_completition_client import BaseContentGenerator, ChatCompletionClient, PromptBuilder
 from ..prompt_builder import PokerFeedbackPromptBuilder, PokerStats
 
 

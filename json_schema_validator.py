@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Type, Callable
+from typing import Any, Callable, Dict, List, Type
 
 from jsonschema import Draft7Validator
 from jsonschema.protocols import Validator  # type: ignore[import-not-found]
@@ -55,11 +55,11 @@ class SchemaValidatorLoader(JsonSchemaValidator):
     """
 
     def __init__(
-            self,
-            schema_pkg: str,
-            schema_name: str,
-            validator_cls: Type[Validator] = Draft7Validator,
-            schema_loader: Callable[[str, str], Dict[str, Any]] = load_schema,
+        self,
+        schema_pkg: str,
+        schema_name: str,
+        validator_cls: Type[Validator] = Draft7Validator,
+        schema_loader: Callable[[str, str], Dict[str, Any]] = load_schema,
     ) -> None:
         # Load schema using the provided loader and pass to the base class.
         schema = schema_loader(schema_pkg, schema_name)

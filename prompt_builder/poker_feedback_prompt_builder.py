@@ -23,7 +23,7 @@ class PokerStats(TypedDict, total=False):
 
     hands_played: int
     vpip: float  # Voluntarily Put Money In Pot %
-    pfr: float   # Pre-Flop Raise %
+    pfr: float  # Pre-Flop Raise %
     three_bet: float  # 3-bet %
     aggression_factor: float
     showdown_win_rate: float  # % of showdowns won

@@ -4,9 +4,7 @@ from typing import Any, Dict, List
 
 import openai
 
-from beeflow_ai.openai_chat_completition_client import (
-    OpenAIChatCompletionClient,
-)
+from beeflow_ai.openai_chat_completition_client import OpenAIChatCompletionClient
 
 
 class _StubMessage:
@@ -30,12 +28,14 @@ class StubCreate:
 
     def __call__(self, *, model, messages, top_p, **kwargs):  # type: ignore[no-redef]
         # Record exact args/kwargs to assert behavior (esp. max_tokens presence).
-        self.calls.append({
-            "model": model,
-            "messages": messages,
-            "top_p": top_p,
-            **kwargs,
-        })
+        self.calls.append(
+            {
+                "model": model,
+                "messages": messages,
+                "top_p": top_p,
+                **kwargs,
+            }
+        )
         return _StubResponse("  hello  ")
 
 

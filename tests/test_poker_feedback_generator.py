@@ -1,15 +1,10 @@
 from __future__ import annotations
 
-from typing import Optional, Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from beeflow_ai.generator.poker_feedback_generator import PokerFeedbackGenerator
-from beeflow_ai.openai_chat_completition_client import (
-    ChatCompletionClient,
-)
-from beeflow_ai.prompt_builder import (
-    PokerFeedbackPromptBuilder,
-    PokerStats,
-)
+from beeflow_ai.openai_chat_completition_client import ChatCompletionClient
+from beeflow_ai.prompt_builder import PokerFeedbackPromptBuilder, PokerStats
 
 
 class StubClient(ChatCompletionClient):
@@ -24,12 +19,14 @@ class StubClient(ChatCompletionClient):
         max_tokens: Optional[int] = None,
         top_p: float = 1.0,
     ) -> str:
-        self.calls.append({
-            "model_name": model_name,
-            "messages": messages,
-            "max_tokens": max_tokens,
-            "top_p": top_p,
-        })
+        self.calls.append(
+            {
+                "model_name": model_name,
+                "messages": messages,
+                "max_tokens": max_tokens,
+                "top_p": top_p,
+            }
+        )
         return "x" * 100  # long content to test trimming
 
 
@@ -54,6 +51,4 @@ def test_generate_builds_messages_passes_params_and_trims_output():
     assert call["messages"][0]["role"] == "system"
     assert "plain text only" in call["messages"][0]["content"]
     assert call["messages"][1]["role"] == "user"
-    assert call["messages"][1]["content"].startswith(
-        "Provide concise poker coaching feedback"
-    )
+    assert call["messages"][1]["content"].startswith("Provide concise poker coaching feedback")

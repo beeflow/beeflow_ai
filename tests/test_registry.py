@@ -4,8 +4,8 @@ from typing import Optional
 
 from beeflow_ai.openai_chat_completition_client import (
     BaseContentGenerator,
-    register_content_generator,
     ContentGeneratorRegistry,
+    register_content_generator,
 )
 
 

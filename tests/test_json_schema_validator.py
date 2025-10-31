@@ -1,11 +1,8 @@
 from __future__ import annotations
 
-from typing import Dict, Any
+from typing import Any, Dict
 
-from beeflow_ai.json_schema_validator import (
-    JsonSchemaValidator,
-    SchemaValidatorLoader,
-)
+from beeflow_ai.json_schema_validator import JsonSchemaValidator, SchemaValidatorLoader
 
 
 def test_json_schema_validator_ok_and_errors():

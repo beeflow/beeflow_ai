@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import os
-from typing import Optional, Protocol, Callable
 from abc import ABC, abstractmethod
+from typing import Callable, Optional, Protocol
 
 import openai
 from openai.types.chat import ChatCompletionMessageParam
@@ -18,12 +18,12 @@ class ChatCompletionClient(Protocol):
     """Abstract chat completion client used via dependency injection."""
 
     def create(
-            self,
-            *,
-            model_name: str,
-            messages: list[ChatCompletionMessageParam],
-            max_tokens: Optional[int] = None,
-            top_p: float = 1.0,
+        self,
+        *,
+        model_name: str,
+        messages: list[ChatCompletionMessageParam],
+        max_tokens: Optional[int] = None,
+        top_p: float = 1.0,
     ) -> str:
         """Return assistant message content (string)."""
         ...
@@ -70,18 +70,17 @@ class OpenAIChatCompletionClient:
         # Dependency injection: allow tests to pass a simple stub instead of
         # patching.
         self._create: ChatCompletionsCreate = (
-            openai_create
-            or openai.chat.completions.create  # type: ignore[assignment]
+            openai_create or openai.chat.completions.create  # type: ignore[assignment]
         )
 
     # noinspection PyMethodMayBeStatic
     def create(
-            self,
-            *,
-            model_name: str,
-            messages: list[ChatCompletionMessageParam],
-            max_tokens: Optional[int] = None,
-            top_p: float = 1.0,
+        self,
+        *,
+        model_name: str,
+        messages: list[ChatCompletionMessageParam],
+        max_tokens: Optional[int] = None,
+        top_p: float = 1.0,
     ) -> str:
         # Prepare parameters for OpenAI API call
         api_params = {
@@ -114,13 +113,11 @@ class BaseContentGenerator(ABC):
     """
 
     def __init__(
-            self,
-            prompt_builder: PromptBuilder,
-            chat_completion_client: ChatCompletionClient,
-            schema_validator: Optional[JsonSchemaValidator] = None,
-            model_name: str = os.environ.get(
-                "STORY_GENERATION_MODEL", "gpt-5"
-            ),
+        self,
+        prompt_builder: PromptBuilder,
+        chat_completion_client: ChatCompletionClient,
+        schema_validator: Optional[JsonSchemaValidator] = None,
+        model_name: str = os.environ.get("STORY_GENERATION_MODEL", "gpt-5"),
     ) -> None:
         self.prompt_builder: PromptBuilder = prompt_builder
         self.chat_completion_client: ChatCompletionClient = chat_completion_client
@@ -144,8 +141,7 @@ def register_content_generator(func: Callable[..., BaseContentGenerator]):
 
     return wrapper
 
- 
- 
+
 class ContentGeneratorRegistry:
     """In-memory registry of content generators keyed by their model name.
 

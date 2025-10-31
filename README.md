@@ -50,6 +50,61 @@ python -m pip install dist/beeflow_ai_toolkit-*.whl
 
 The project is configured via `pyproject.toml` and uses `setuptools` as the build backend.
 
+## Publishing to TestPyPI/PyPI
+
+Before publishing, ensure `pyproject.toml` contains correct metadata (`name`, `version`, `description`, `authors`, `readme`, `licence`, `dependencies`). Increment `version` for every release.
+
+1) Build the artefacts (sdist + wheel):
+
+```bash
+python -m pip install -U build
+python -m build
+```
+
+2) Install Twine and check the distributions:
+
+```bash
+python -m pip install -U twine
+python -m twine check dist/*
+```
+
+3) Upload to TestPyPI first (recommended):
+
+```bash
+python -m twine upload --repository testpypi dist/*
+# Username: __token__
+# Password: <your TestPyPI token>
+```
+
+Verify installation from TestPyPI in a clean environment:
+
+```bash
+python -m venv .venv-test
+./.venv-test/bin/python -m pip install -U pip
+./.venv-test/bin/python -m pip install \
+  --index-url https://test.pypi.org/simple \
+  --extra-index-url https://pypi.org/simple \
+  beeflow-ai-toolkit
+```
+
+4) Upload to PyPI (production):
+
+```bash
+python -m twine upload dist/*
+# Username: __token__
+# Password: <your PyPI token>
+```
+
+You can also set environment variables to avoid interactive prompts:
+
+```bash
+export TWINE_USERNAME=__token__
+export TWINE_PASSWORD=<your-token>
+python -m twine upload dist/*
+```
+
+Optional: add `classifiers` and `project.urls` to `pyproject.toml` to improve your package’s visibility on PyPI.
+
 ## Quick Start
 
 ### 1) OpenAI client and poker feedback generator

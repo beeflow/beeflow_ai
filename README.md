@@ -25,6 +25,31 @@ python -m pip install dist/beeflow_ai_toolkit-*.whl
 
 Requirements: Python 3.11+, `openai>=1.40.0`, `jsonschema>=4.21.0` (installed automatically).
 
+## Building the package
+
+You can build both source distribution (sdist) and wheel using the standard Python build tool.
+
+```bash
+# Optional: clean previous build artefacts
+rm -rf dist/
+
+# Install the build backend
+python -m pip install -U build
+
+# Build sdist and wheel according to pyproject.toml
+python -m build
+
+# The artefacts will be placed in ./dist/
+ls dist/
+# beeflow_ai_toolkit-<version>.tar.gz (sdist)
+# beeflow_ai_toolkit-<version>-py3-none-any.whl (wheel)
+
+# Optionally, verify the wheel installs correctly
+python -m pip install dist/beeflow_ai_toolkit-*.whl
+```
+
+The project is configured via `pyproject.toml` and uses `setuptools` as the build backend.
+
 ## Quick Start
 
 ### 1) OpenAI client and poker feedback generator

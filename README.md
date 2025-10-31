@@ -1,48 +1,50 @@
 # Beeflow AI Toolkit
 
-Lekka biblioteka Pythona zawierająca:
-- klienta do OpenAI Chat Completions (z prostym DI),
-- budowniczych promptów (np. krótka informacja zwrotna dla sesji pokera),
-- walidator JSON Schema (Draft-07),
-- rejestr i bazową klasę generatora treści.
+A lightweight Python toolkit providing:
+- an OpenAI Chat Completions client (with simple dependency injection),
+- prompt builders (e.g., concise feedback for a poker session),
+- a JSON Schema validator (Draft-07),
+- a registry and a base class for content generators.
 
-Biblioteka jest dostarczana na licencji MIT i może być użyta w dowolnym projekcie.
+Distributed under the MIT licence. Suitable for use in any project.
 
-## Instalacja
+## Installation
 
-Wariant A: instalacja bezpośrednio z folderu (zalecane dla lokalnego użytku)
+Option A: install directly from the source directory (recommended for local development)
 
 ```bash
-cd whn_application/beeflow_ai
 python -m pip install .
 ```
 
-Wariant B: budowa i instalacja z paczki (wheel)
+Option B: build and install from a wheel package
 
 ```bash
-cd whn_application/beeflow_ai
-python -m pip install build && python -m build
+python -m pip install -U build && python -m build
 python -m pip install dist/beeflow_ai_toolkit-*.whl
 ```
 
-Wymagania: Python 3.11+, `openai>=1.40.0`, `jsonschema>=4.21.0` (instalują się automatycznie).
+Requirements: Python 3.11+, `openai>=1.40.0`, `jsonschema>=4.21.0` (installed automatically).
 
-## Szybki start
+## Quick Start
 
-### 1) Klient OpenAI i generator informacji zwrotnej do pokera
+### 1) OpenAI client and poker feedback generator
 
 ```python
-from beeflow_ai import OpenAIChatCompletionClient, PokerFeedbackGenerator, PokerStats
+from beeflow_ai import (
+    OpenAIChatCompletionClient,
+    PokerFeedbackGenerator,
+    PokerStats,
+)
 
-# Ustaw klucz API (lub przekaż jawnie do klienta)
-# export OPENAI_API_KEY=...  # lub ustaw w kodzie
+# Set the API key (or pass it explicitly to the client)
+# export OPENAI_API_KEY=...
 
-client = OpenAIChatCompletionClient()  # użyje OPENAI_API_KEY z env
+client = OpenAIChatCompletionClient()  # uses OPENAI_API_KEY from the environment
 
-# Opcjonalnie: wybór modelu z ENV, np. POKER_FEEDBACK_MODEL
+# Optional: select the model via an environment variable, e.g. POKER_FEEDBACK_MODEL
 # export POKER_FEEDBACK_MODEL=gpt-4o-mini
 
-gen = PokerFeedbackGenerator(chat_completion_client=client)  # domyślny model z env lub 'gpt-5'
+gen = PokerFeedbackGenerator(chat_completion_client=client)  # default model from env or 'gpt-5'
 stats: PokerStats = {
     "hands_played": 120,
     "vpip": 28.3,
@@ -59,7 +61,7 @@ text = gen.generate(stats, top_p=0.8, max_tokens=64)
 print(text)
 ```
 
-### 2) Walidacja JSON Schema
+### 2) JSON Schema validation
 
 ```python
 from beeflow_ai import JsonSchemaValidator, SchemaValidatorLoader
@@ -77,28 +79,31 @@ validator = JsonSchemaValidator(schema)
 result = validator.validate({"name": "Alice", "age": 8})
 assert result["ok"]
 
-# Lub z loaderem (np. pliki schematów jako data w pakiecie)
-loader = SchemaValidatorLoader(schema_pkg="my.schemas", schema_name="person.schema.json")
+# Or use the loader (e.g., when schemas are packaged as data files)
+loader = SchemaValidatorLoader(
+    schema_pkg="my.schemas",
+    schema_name="person.schema.json",
+)
 print(loader.validate({"name": "Bob"}))
 ```
 
-## API publiczne
+## Public API
 
-Pakiet eksportuje:
-- `OpenAIChatCompletionClient`, `ChatCompletionClient` (protokół),
+The package exports:
+- `OpenAIChatCompletionClient`, `ChatCompletionClient` (protocol),
 - `BaseContentGenerator`, `ContentGeneratorRegistry`, `register_content_generator`,
 - `PokerFeedbackPromptBuilder`, `PokerFeedbackGenerator`, `PokerStats`,
 - `JsonSchemaValidator`, `SchemaValidatorLoader`, `load_schema`.
 
-Wewnętrzne implementacje używają importów relatywnych i DI, dzięki czemu łatwo je testować
-bez patchowania modułów globalnych.
+Internal implementations rely on relative imports and dependency injection, making them easy
+to test without patching global modules.
 
-## Konfiguracja środowiska
+## Environment Configuration
 
-- `OPENAI_API_KEY` — klucz API do OpenAI.
-- `STORY_GENERATION_MODEL` — domyślny model dla generatorów bazujących na `BaseContentGenerator`.
-- `POKER_FEEDBACK_MODEL` — domyślny model używany przez `PokerFeedbackGenerator`.
+- `OPENAI_API_KEY` — API key for OpenAI.
+- `STORY_GENERATION_MODEL` — default model for generators based on `BaseContentGenerator`.
+- `POKER_FEEDBACK_MODEL` — default model used by `PokerFeedbackGenerator`.
 
-## Licencja
+## Licence
 
-MIT — szczegóły w pliku `LICENSE`.
+MIT — see the `LICENSE` file for details.
